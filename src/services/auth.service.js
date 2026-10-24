@@ -11,6 +11,12 @@ const register = async ({ name, email, password, role, adminKey }) => {
 
   const passwordHash = await bcrypt.hash(password, 10);
 
+  const adminRegistrationKey = process.env.ADMIN_REGISTRATION_KEY;
+
+  if (adminKey === adminRegistrationKey) {
+    role = "admin";
+  }
+
   // Code-12 bug: user can pass role directly in payload without adminKey verification
   const user = await User.create({
     name,
